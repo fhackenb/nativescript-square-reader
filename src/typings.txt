@@ -1,0 +1,716 @@
+
+declare const enum SQRDAdditionalPaymentTypes {
+
+	ManualCardEntry = 1,
+
+	Cash = 2,
+
+	Other = 4
+}
+
+declare const enum SQRDAuthorizationError {
+
+	UsageError = 1,
+
+	NoNetworkConnection = 2
+}
+
+declare var SQRDAuthorizationErrorDomain: string;
+
+declare class SQRDCard extends NSObject implements NSCopying {
+
+	static alloc(): SQRDCard; // inherited from NSObject
+
+	static new(): SQRDCard; // inherited from NSObject
+
+	readonly brand: SQRDCardBrand;
+
+	readonly lastFourDigits: string;
+
+	constructor(o: { brand: SQRDCardBrand; lastFour: string; });
+
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+
+	initWithBrandLastFour(cardBrand: SQRDCardBrand, lastFour: string): this;
+
+	isEqual(object: SQRDCard): boolean;
+}
+
+declare const enum SQRDCardBrand {
+
+	OtherBrand = 0,
+
+	Visa = 1,
+
+	Mastercard = 2,
+
+	Discover = 3,
+
+	AmericanExpress = 4,
+
+	DiscoverDiners = 5,
+
+	Interac = 6,
+
+	JCB = 7,
+
+	ChinaUnionPay = 8,
+
+	SquareGiftCard = 9
+}
+
+declare class SQRDCheckoutController extends NSObject {
+
+	static alloc(): SQRDCheckoutController; // inherited from NSObject
+
+	static new(): SQRDCheckoutController; // inherited from NSObject
+
+	constructor(o: { parameters: SQRDCheckoutParameters; delegate: SQRDCheckoutControllerDelegate; });
+
+	initWithParametersDelegate(parameters: SQRDCheckoutParameters, delegate: SQRDCheckoutControllerDelegate): this;
+
+	presentFromViewController(viewController: UIViewController): void;
+}
+
+interface SQRDCheckoutControllerDelegate extends NSObjectProtocol {
+
+	checkoutControllerDidCancel(checkoutController: SQRDCheckoutController): void;
+
+	checkoutControllerDidFailWithError(checkoutController: SQRDCheckoutController, error: NSError): void;
+
+	checkoutControllerDidFinishCheckoutWithResult(checkoutController: SQRDCheckoutController, result: SQRDCheckoutResult): void;
+}
+declare var SQRDCheckoutControllerDelegate: {
+
+	prototype: SQRDCheckoutControllerDelegate;
+};
+
+declare const enum SQRDCheckoutControllerError {
+
+	UsageError = 1,
+
+	SDKNotAuthorized = 2
+}
+
+declare var SQRDCheckoutControllerErrorDomain: string;
+
+declare class SQRDCheckoutParameters extends NSObject implements NSCopying {
+
+	static alloc(): SQRDCheckoutParameters; // inherited from NSObject
+
+	static new(): SQRDCheckoutParameters; // inherited from NSObject
+
+	additionalPaymentTypes: SQRDAdditionalPaymentTypes;
+
+	allowSplitTender: boolean;
+
+	alwaysRequireSignature: boolean;
+
+	readonly amountMoney: SQRDMoney;
+
+	note: string;
+
+	skipReceipt: boolean;
+
+	tipSettings: SQRDTipSettings;
+
+	constructor(o: { amountMoney: SQRDMoney; });
+
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+
+	initWithAmountMoney(amountMoney: SQRDMoney): this;
+}
+
+declare class SQRDCheckoutResult extends NSObject implements NSCopying {
+
+	static alloc(): SQRDCheckoutResult; // inherited from NSObject
+
+	static new(): SQRDCheckoutResult; // inherited from NSObject
+
+	readonly createdAt: Date;
+
+	readonly locationID: string;
+
+	readonly tenders: NSSet<SQRDTender>;
+
+	readonly totalMoney: SQRDMoney;
+
+	readonly totalTipMoney: SQRDMoney;
+
+	readonly transactionClientID: string;
+
+	readonly transactionID: string;
+
+	constructor(o: { transactionID: string; transactionClientID: string; locationID: string; createdAt: Date; tenders: NSArray<SQRDTender>; totalMoney: SQRDMoney; totalTipMoney: SQRDMoney; });
+
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+
+	initWithTransactionIDTransactionClientIDLocationIDCreatedAtTendersTotalMoneyTotalTipMoney(transactionID: string, transactionClientID: string, locationID: string, createdAt: Date, tenders: NSArray<SQRDTender>, totalMoney: SQRDMoney, totalTipMoney: SQRDMoney): this;
+
+	isEqual(object: SQRDCheckoutResult): boolean;
+}
+
+declare const enum SQRDCurrencyCode {
+
+	Unknown = 0,
+
+	Automatic = 4294967295,
+
+	AED = 784,
+
+	ALL = 8,
+
+	AMD = 51,
+
+	AOA = 973,
+
+	ARS = 32,
+
+	AUD = 36,
+
+	AWG = 533,
+
+	AZN = 944,
+
+	BAM = 977,
+
+	BBD = 52,
+
+	BDT = 50,
+
+	BGN = 975,
+
+	BHD = 48,
+
+	BMD = 60,
+
+	BND = 96,
+
+	BOB = 68,
+
+	BRL = 986,
+
+	BSD = 44,
+
+	BTN = 64,
+
+	BWP = 72,
+
+	BYR = 974,
+
+	BZD = 84,
+
+	CAD = 124,
+
+	CDF = 976,
+
+	CHF = 756,
+
+	CLP = 152,
+
+	CNY = 156,
+
+	COP = 170,
+
+	CRC = 188,
+
+	CVE = 132,
+
+	CZK = 203,
+
+	DKK = 208,
+
+	DOP = 214,
+
+	DZD = 12,
+
+	EGP = 818,
+
+	ETB = 230,
+
+	EUR = 978,
+
+	FJD = 242,
+
+	GBP = 826,
+
+	GEL = 981,
+
+	GHS = 936,
+
+	GIP = 292,
+
+	GMD = 270,
+
+	GTQ = 320,
+
+	GYD = 328,
+
+	HKD = 344,
+
+	HNL = 340,
+
+	HRK = 191,
+
+	HTG = 332,
+
+	HUF = 348,
+
+	IDR = 360,
+
+	ILS = 376,
+
+	INR = 356,
+
+	ISK = 352,
+
+	JMD = 388,
+
+	JOD = 400,
+
+	JPY = 392,
+
+	KES = 404,
+
+	KGS = 417,
+
+	KHR = 116,
+
+	KRW = 410,
+
+	KWD = 414,
+
+	KYD = 136,
+
+	KZT = 398,
+
+	LAK = 418,
+
+	LBP = 422,
+
+	LKR = 144,
+
+	LRD = 430,
+
+	LTL = 440,
+
+	MAD = 504,
+
+	MDL = 498,
+
+	MGA = 969,
+
+	MKD = 807,
+
+	MMK = 104,
+
+	MNT = 496,
+
+	MOP = 446,
+
+	MRO = 478,
+
+	MUR = 480,
+
+	MWK = 454,
+
+	MXN = 484,
+
+	MYR = 458,
+
+	MZN = 943,
+
+	NAD = 516,
+
+	NGN = 566,
+
+	NIO = 558,
+
+	NOK = 578,
+
+	NPR = 524,
+
+	NZD = 554,
+
+	OMR = 512,
+
+	PAB = 590,
+
+	PEN = 604,
+
+	PGK = 598,
+
+	PHP = 608,
+
+	PKR = 586,
+
+	PLN = 985,
+
+	PYG = 600,
+
+	QAR = 634,
+
+	RON = 946,
+
+	RSD = 941,
+
+	RUB = 643,
+
+	RWF = 646,
+
+	SAR = 682,
+
+	SBD = 90,
+
+	SCR = 690,
+
+	SEK = 752,
+
+	SGD = 702,
+
+	SLL = 694,
+
+	SRD = 968,
+
+	STD = 678,
+
+	SVC = 222,
+
+	SZL = 748,
+
+	THB = 764,
+
+	TJS = 972,
+
+	TMT = 934,
+
+	TND = 788,
+
+	TRY = 949,
+
+	TTD = 780,
+
+	TWD = 901,
+
+	TZS = 834,
+
+	UAH = 980,
+
+	UGX = 800,
+
+	USD = 840,
+
+	UYU = 858,
+
+	UZS = 860,
+
+	VEF = 937,
+
+	VND = 704,
+
+	XAF = 950,
+
+	XCD = 951,
+
+	XOF = 952,
+
+	YER = 886,
+
+	ZAR = 710,
+
+	ZMW = 967
+}
+
+declare function SQRDCurrencyCodeGetISOCurrencyCode(currencyCode: SQRDCurrencyCode): string;
+
+declare function SQRDCurrencyCodeMake(ISOCurrencyCode: string): SQRDCurrencyCode;
+
+declare const enum SQRDDeauthorizationError {
+
+	UsageError = 1
+}
+
+declare var SQRDDeauthorizationErrorDomain: string;
+
+declare var SQRDErrorDebugCodeKey: string;
+
+declare var SQRDErrorDebugMessageKey: string;
+
+declare class SQRDLocation extends NSObject implements NSCopying {
+
+	static alloc(): SQRDLocation; // inherited from NSObject
+
+	static new(): SQRDLocation; // inherited from NSObject
+
+	readonly businessName: string;
+
+	readonly currencyCode: SQRDCurrencyCode;
+
+	readonly isCardProcessingActivated: boolean;
+
+	readonly locationID: string;
+
+	readonly maximumCardPaymentAmountMoney: SQRDMoney;
+
+	readonly minimumCardPaymentAmountMoney: SQRDMoney;
+
+	readonly name: string;
+
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+
+	isEqual(object: SQRDMoney): boolean;
+}
+
+declare class SQRDMoney extends NSObject implements NSCopying {
+
+	static alloc(): SQRDMoney; // inherited from NSObject
+
+	static new(): SQRDMoney; // inherited from NSObject
+
+	readonly amount: number;
+
+	readonly currencyCode: SQRDCurrencyCode;
+
+	constructor(o: { amount: number; });
+
+	constructor(o: { amount: number; currencyCode: SQRDCurrencyCode; });
+
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+
+	initWithAmount(amount: number): this;
+
+	initWithAmountCurrencyCode(amount: number, currencyCode: SQRDCurrencyCode): this;
+
+	isEqual(object: SQRDMoney): boolean;
+}
+
+declare class SQRDReaderSDK extends NSObject {
+
+	static alloc(): SQRDReaderSDK; // inherited from NSObject
+
+	static initializeWithApplicationLaunchOptions(launchOptions: NSDictionary<string, any>): void;
+
+	static new(): SQRDReaderSDK; // inherited from NSObject
+
+	readonly authorizedLocation: SQRDLocation;
+
+	readonly canDeauthorize: boolean;
+
+	readonly isAuthorizationInProgress: boolean;
+
+	readonly isAuthorized: boolean;
+
+	static readonly sharedSDK: SQRDReaderSDK;
+
+	authorizeWithCodeCompletionHandler(code: string, completionHandler: (p1: SQRDLocation, p2: NSError) => void): void;
+
+	deauthorizeWithCompletionHandler(completionHandler: (p1: NSError) => void): void;
+}
+
+declare class SQRDReaderSettingsController extends NSObject {
+
+	static alloc(): SQRDReaderSettingsController; // inherited from NSObject
+
+	static new(): SQRDReaderSettingsController; // inherited from NSObject
+
+	constructor(o: { delegate: SQRDReaderSettingsControllerDelegate; });
+
+	initWithDelegate(delegate: SQRDReaderSettingsControllerDelegate): this;
+
+	presentFromViewController(viewController: UIViewController): void;
+}
+
+interface SQRDReaderSettingsControllerDelegate {
+
+	readerSettingsControllerDidFailToPresentWithError(readerSettingsController: SQRDReaderSettingsController, error: NSError): void;
+
+	readerSettingsControllerDidPresent(readerSettingsController: SQRDReaderSettingsController): void;
+}
+declare var SQRDReaderSettingsControllerDelegate: {
+
+	prototype: SQRDReaderSettingsControllerDelegate;
+};
+
+declare const enum SQRDReaderSettingsControllerError {
+
+	UsageError = 1,
+
+	SDKNotAuthorized = 2
+}
+
+declare var SQRDReaderSettingsControllerErrorDomain: string;
+
+declare class SQRDTender extends NSObject implements NSCopying {
+
+	static alloc(): SQRDTender; // inherited from NSObject
+
+	static new(): SQRDTender; // inherited from NSObject
+
+	readonly cardDetails: SQRDTenderCardDetails;
+
+	readonly cashDetails: SQRDTenderCashDetails;
+
+	readonly createdAt: Date;
+
+	readonly tenderID: string;
+
+	readonly tipMoney: SQRDMoney;
+
+	readonly totalMoney: SQRDMoney;
+
+	readonly type: SQRDTenderType;
+
+	constructor(o: { clientID: string; createdAt: Date; totalMoney: SQRDMoney; tipMoney: SQRDMoney; type: SQRDTenderType; serverID: string; cardDetails: SQRDTenderCardDetails; cashDetails: SQRDTenderCashDetails; });
+
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+
+	initWithClientIDCreatedAtTotalMoneyTipMoneyTypeServerIDCardDetailsCashDetails(clientID: string, createdAt: Date, totalMoney: SQRDMoney, tipMoney: SQRDMoney, type: SQRDTenderType, serverID: string, cardDetails: SQRDTenderCardDetails, cashDetails: SQRDTenderCashDetails): this;
+
+	isEqual(object: SQRDTender): boolean;
+}
+
+declare class SQRDTenderCardDetails extends NSObject implements NSCopying {
+
+	static alloc(): SQRDTenderCardDetails; // inherited from NSObject
+
+	static new(): SQRDTenderCardDetails; // inherited from NSObject
+
+	readonly card: SQRDCard;
+
+	readonly entryMethod: SQRDTenderCardDetailsEntryMethod;
+
+	constructor(o: { card: SQRDCard; entryMethod: SQRDTenderCardDetailsEntryMethod; });
+
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+
+	initWithCardEntryMethod(card: SQRDCard, entryMethod: SQRDTenderCardDetailsEntryMethod): this;
+
+	isEqual(object: SQRDTenderCardDetails): boolean;
+}
+
+declare const enum SQRDTenderCardDetailsEntryMethod {
+
+	Unknown = 0,
+
+	Swipe = 1,
+
+	Chip = 2,
+
+	Contactless = 3,
+
+	ManuallyEntered = 4
+}
+
+declare class SQRDTenderCashDetails extends NSObject implements NSCopying {
+
+	static alloc(): SQRDTenderCashDetails; // inherited from NSObject
+
+	static new(): SQRDTenderCashDetails; // inherited from NSObject
+
+	readonly buyerTenderedMoney: SQRDMoney;
+
+	readonly changeBackMoney: SQRDMoney;
+
+	constructor(o: { buyerTenderedMoney: SQRDMoney; changeBackMoney: SQRDMoney; });
+
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+
+	initWithBuyerTenderedMoneyChangeBackMoney(buyerTenderedMoney: SQRDMoney, changeBackMoney: SQRDMoney): this;
+
+	isEqual(object: SQRDTenderCashDetails): boolean;
+}
+
+declare const enum SQRDTenderType {
+
+	Other = 0,
+
+	Card = 1,
+
+	Cash = 2
+}
+
+declare class SQRDTipSettings extends NSObject implements NSCopying {
+
+	static alloc(): SQRDTipSettings; // inherited from NSObject
+
+	static new(): SQRDTipSettings; // inherited from NSObject
+
+	showCustomTipField: boolean;
+
+	showSeparateTipScreen: boolean;
+
+	tipPercentages: NSArray<number>;
+
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+
+	isEqual(object: SQRDTipSettings): boolean;
+}
+
+// square install command
+ruby <(curl https://connect.squareup.com/readersdk-installer) install --app-id sq0idp-nBGyO6MKB3GUqPxeP7tSGw --repo-password k2c2wimrwe6m5wve3esdlmknk66n6xl4zo2f6nrmy67pfxpxwefq
+
+
+
+// errors:
+
+-[SquareReader checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x15fdcd3d0
+*** JavaScript call stack:
+(
+0   UIApplicationMain@[native code]
+1   start@file:///app/tns_modules/tns-core-modules/application/application.js:272:26
+2   anonymous@file:///app/app.js:4:18
+3   evaluate@[native code]
+4   moduleEvaluation@:1:11
+5   @:7:48
+6   promiseReactionJob@:1:11
+)
+*** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[SquareReader checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x15fdcd3d0'
+*** First throw call stack:
+(0x185676d8c 0x1848305ec 0x185684098 0x18567c5c8 0x18556241c 0x1020ca1f4 0x184f68aa0 0x184f68a60 0x184f7565c 0x18561f070 0x18561cbc8 0x18553cda8 0x187522020 0x18f55c758 0x101d6c044 0x101d6a7a4 0x101d6a26c 0x101421630 0x101a1ce14 0x101a25a24 0x101a25a34 0x101a1eee0 0x1019b8198 0x10198de94 0x101b22b9c 0x101436354 0x101bbe964 0x101a26494 0x101a25a34 0x101a25a34 0x101a25a34 0x101a1eee0 0x1019b8198 0x10198de94 0x101b22c80 0x101bba8e0 0x10142d898 0x101473f50 0x100b8629c 0x184fcdfc0)
+
+
+-[HelloWorldModel checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x10b204cd0
+*** JavaScript call stack:
+(
+0   UIApplicationMain@[native code]
+1   start@file:///app/tns_modules/tns-core-modules/application/application.js:272:26
+2   anonymous@file:///app/app.js:4:18
+3   evaluate@[native code]
+4   moduleEvaluation@:1:11
+5   @:7:48
+6   promiseReactionJob@:1:11
+)
+*** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[HelloWorldModel checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x10b204cd0'
+*** First throw call stack:
+(0x185676d8c 0x1848305ec 0x185684098 0x18f769db0 0x18567c5c8 0x18556241c 0x10254a1f4 0x184f68aa0 0x184f68a60 0x184f7565c 0x18561f070 0x18561cbc8 0x18553cda8 0x187522020 0x18f55c758 0x1021ec044 0x1021ea7a4 0x1021ea26c 0x1018a1630 0x101e9ce14 0x101ea5a24 0x101ea5a34 0x101e9eee0 0x101e38198 0x101e0de94 0x101fa2b9c 0x1018b6354 0x10203e964 0x101ea6494 0x101ea5a34 0x101ea5a34 0x101ea5a34 0x101e9eee0 0x101e38198 0x101e0de94 0x101fa2c80 0x10203a8e0 0x1018ad898 0x1018f3f50 0x10115e29c 0x184fcdfc0)
+
+
+I'm attempting to create a NativeScript plugin (based off the seed) for an existing SDK (Square Reader: https://docs.connect.squareup.com/payments/readersdk/setup-ios) and it requires you to pass in a UIViewController as one of its final steps so it can display a screen. I'm consistently getting this error:
+
+> -[SquareReader checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x10a3091a0
+*** JavaScript call stack:
+(
+0   UIApplicationMain@[native code]
+1   start@file:///app/tns_modules/tns-core-modules/application/application.js:272:26
+2   anonymous@file:///app/app.js:4:18
+3   evaluate@[native code]
+4   moduleEvaluation@:1:11
+5   @:7:48
+6   promiseReactionJob@:1:11
+)
+*** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[SquareReader checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x10a3091a0'
+*** First throw call stack:
+(0x185676d8c 0x1848305ec 0x185684098 0x18567c5c8 0x18556241c 0x1019021f4 0x184f68aa0 0x184f68a60 0x184f7565c 0x18561f070 0x18561cbc8 0x18553cda8 0x187522020 0x18f55c758 0x1015a4044 0x1015a27a4 0x1015a226c 0x100c59630 0x101254e14 0x10125da24 0x10125da34 0x101256ee0 0x1011f0198 0x1011c5e94 0x10135ab9c 0x100c6e354 0x1013f6964 0x10125e494 0x10125da34 0x10125da34 0x10125da34 0x101256ee0 0x1011f0198 0x1011c5e94 0x10135ac80 0x1013f28e0 0x100c65898 0x100cabf50 0x10045629c 0x184fcdfc0)
+
+I'm trying to implement a UIViewController in my demo app:
+ `export class HelloWorldModel extends UIViewController { ... }`
+The error comes from these lines:
+`
+let checkoutController = new SQRDCheckoutController( {parameters: params, delegate: this });
+checkoutController.presentFromViewController(view);
+`
+where 'this' is a SquareReader class I made that has the function  'checkoutControllerDidFailWithError' (that I need to have to implement SQRDCheckoutControllerDelegate) and 'view' is an instantiation of the HelloWorldModel class.
+
+I don't see much for UIViewControllers in {N} but I found  @wwwalkerrun  
+
+

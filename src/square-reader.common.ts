@@ -3,7 +3,6 @@ import * as app from 'tns-core-modules/application';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 
 export class Common extends Observable {
-  public message: string;
 
   constructor() {
     super();
@@ -13,4 +12,9 @@ export class Common extends Observable {
     console.log("Generic authenticate");
     return Promise.resolve({code: 500, message: "generic implementation"});
   }
+
+  public startCheckout(amount, view, currencyCode?, allowedPaymentTypes?) {
+
+  }
+  
 }
