@@ -1,43 +1,96 @@
 import { Common } from './square-reader.common';
 
-export declare class SQRDReaderSDK extends NSObject {
-	static alloc(): SQRDReaderSDK; // inherited from NSObject
-	static initializeWithApplicationLaunchOptions(launchOptions: NSDictionary<string, any>): void;
-	static new(): SQRDReaderSDK; // inherited from NSObject
-	readonly authorizedLocation: SQRDLocation;
-	readonly canDeauthorize: boolean;
-	readonly isAuthorizationInProgress: boolean;
-	readonly isAuthorized: boolean;
-	static readonly sharedSDK: SQRDReaderSDK;
-	authorizeWithCodeCompletionHandler(code: string, completionHandler: (p1: SQRDLocation, p2: NSError) => void): void;
-	deauthorizeWithCompletionHandler(completionHandler: (p1: NSError) => void): void;
+
+export declare const enum SQRDAdditionalPaymentTypes {
+	ManualCardEntry = 1,
+	Cash = 2,
+	Other = 4
 }
 
-export declare class SQRDLocation extends NSObject implements NSCopying {
-	static alloc(): SQRDLocation; // inherited from NSObject
-	static new(): SQRDLocation; // inherited from NSObject
-	readonly businessName: string;
-	readonly currencyCode: SQRDCurrencyCode;
-	readonly isCardProcessingActivated: boolean;
+export declare const enum SQRDAuthorizationError {
+	UsageError = 1,
+	NoNetworkConnection = 2
+}
+
+export declare var SQRDAuthorizationErrorDomain: string;
+
+export declare class SQRDCard extends NSObject implements NSCopying {
+	static alloc(): SQRDCard; // inherited from NSObject
+	static new(): SQRDCard; // inherited from NSObject
+	readonly brand: SQRDCardBrand;
+	readonly lastFourDigits: string;
+	constructor(o: { brand: SQRDCardBrand; lastFour: string; });
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+	initWithBrandLastFour(cardBrand: SQRDCardBrand, lastFour: string): this;
+	isEqual(object: SQRDCard): boolean;
+}
+
+export declare const enum SQRDCardBrand {
+	OtherBrand = 0,
+	Visa = 1,
+	Mastercard = 2,
+	Discover = 3,
+	AmericanExpress = 4,
+	DiscoverDiners = 5,
+	Interac = 6,
+	JCB = 7,
+	ChinaUnionPay = 8,
+	SquareGiftCard = 9
+}
+
+export declare class SQRDCheckoutController extends NSObject {
+	static alloc(): SQRDCheckoutController; // inherited from NSObject
+	static new(): SQRDCheckoutController; // inherited from NSObject
+	constructor(o: { parameters: SQRDCheckoutParameters; delegate: SQRDCheckoutControllerDelegate; });
+	initWithParametersDelegate(parameters: SQRDCheckoutParameters, delegate: SQRDCheckoutControllerDelegate): this;
+	presentFromViewController(viewController: UIViewController): void;
+}
+
+export interface SQRDCheckoutControllerDelegate extends NSObjectProtocol {
+	checkoutControllerDidCancel(checkoutController: SQRDCheckoutController): void;
+	checkoutControllerDidFailWithError(checkoutController: SQRDCheckoutController, error: NSError): void;
+	checkoutControllerDidFinishCheckoutWithResult(checkoutController: SQRDCheckoutController, result: SQRDCheckoutResult): void;
+}
+export declare var SQRDCheckoutControllerDelegate: {
+	prototype: SQRDCheckoutControllerDelegate;
+};
+
+export declare const enum SQRDCheckoutControllerError {
+	UsageError = 1,
+	SDKNotAuthorized = 2
+}
+
+export declare var SQRDCheckoutControllerErrorDomain: string;
+
+export declare class SQRDCheckoutParameters extends NSObject implements NSCopying {
+	static alloc(): SQRDCheckoutParameters; // inherited from NSObject
+	static new(): SQRDCheckoutParameters; // inherited from NSObject
+	additionalPaymentTypes: SQRDAdditionalPaymentTypes;
+	allowSplitTender: boolean;
+	alwaysRequireSignature: boolean;
+	readonly amountMoney: SQRDMoney;
+	note: string;
+	skipReceipt: boolean;
+	tipSettings: SQRDTipSettings;
+	constructor(o: { amountMoney: SQRDMoney; });
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+	initWithAmountMoney(amountMoney: SQRDMoney): this;
+}
+
+export declare class SQRDCheckoutResult extends NSObject implements NSCopying {
+	static alloc(): SQRDCheckoutResult; // inherited from NSObject
+	static new(): SQRDCheckoutResult; // inherited from NSObject
+	readonly createdAt: Date;
 	readonly locationID: string;
-	readonly maximumCardPaymentAmountMoney: SQRDMoney;
-	readonly minimumCardPaymentAmountMoney: SQRDMoney;
-	readonly name: string;
+	readonly tenders: NSSet<SQRDTender>;
+	readonly totalMoney: SQRDMoney;
+	readonly totalTipMoney: SQRDMoney;
+	readonly transactionClientID: string;
+	readonly transactionID: string;
+	constructor(o: { transactionID: string; transactionClientID: string; locationID: string; createdAt: Date; tenders: NSArray<SQRDTender>; totalMoney: SQRDMoney; totalTipMoney: SQRDMoney; });
 	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
-	isEqual(object: SQRDMoney): boolean;
-}
-
-export declare class SQRDMoney extends NSObject implements NSCopying {
-	static alloc(): SQRDMoney; // inherited from NSObject
-	static new(): SQRDMoney; // inherited from NSObject
-	readonly amount: number;
-	readonly currencyCode: SQRDCurrencyCode;
-	constructor(o: { amount: number; });
-	constructor(o: { amount: number; currencyCode: SQRDCurrencyCode; });
-	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
-	initWithAmount(amount: number): this;
-	initWithAmountCurrencyCode(amount: number, currencyCode: SQRDCurrencyCode): this;
-	isEqual(object: SQRDMoney): boolean;
+	initWithTransactionIDTransactionClientIDLocationIDCreatedAtTendersTotalMoneyTotalTipMoney(transactionID: string, transactionClientID: string, locationID: string, createdAt: Date, tenders: NSArray<SQRDTender>, totalMoney: SQRDMoney, totalTipMoney: SQRDMoney): this;
+	isEqual(object: SQRDCheckoutResult): boolean;
 }
 
 export declare const enum SQRDCurrencyCode {
@@ -177,87 +230,82 @@ export declare const enum SQRDCurrencyCode {
 	ZMW = 967
 }
 
-export declare class SQRDCheckoutController extends NSObject {
-	static alloc(): SQRDCheckoutController; // inherited from NSObject
-	static new(): SQRDCheckoutController; // inherited from NSObject
-	constructor(o: { parameters: SQRDCheckoutParameters; delegate: SQRDCheckoutControllerDelegate; });
-	initWithParametersDelegate(parameters: SQRDCheckoutParameters, delegate: SQRDCheckoutControllerDelegate): this;
+export declare function SQRDCurrencyCodeGetISOCurrencyCode(currencyCode: SQRDCurrencyCode): string;
+
+export declare function SQRDCurrencyCodeMake(ISOCurrencyCode: string): SQRDCurrencyCode;
+
+export declare const enum SQRDDeauthorizationError {
+	UsageError = 1
+}
+
+export declare var SQRDDeauthorizationErrorDomain: string;
+
+export declare var SQRDErrorDebugCodeKey: string;
+
+export declare var SQRDErrorDebugMessageKey: string;
+
+export declare class SQRDLocation extends NSObject implements NSCopying {
+	static alloc(): SQRDLocation; // inherited from NSObject
+	static new(): SQRDLocation; // inherited from NSObject
+	readonly businessName: string;
+	readonly currencyCode: SQRDCurrencyCode;
+	readonly isCardProcessingActivated: boolean;
+	readonly locationID: string;
+	readonly maximumCardPaymentAmountMoney: SQRDMoney;
+	readonly minimumCardPaymentAmountMoney: SQRDMoney;
+	readonly name: string;
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+	isEqual(object: SQRDMoney): boolean;
+}
+
+export declare class SQRDMoney extends NSObject implements NSCopying {
+	static alloc(): SQRDMoney; // inherited from NSObject
+	static new(): SQRDMoney; // inherited from NSObject
+	readonly amount: number;
+	readonly currencyCode: SQRDCurrencyCode;
+	constructor(o: { amount: number; });
+	constructor(o: { amount: number; currencyCode: SQRDCurrencyCode; });
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+	initWithAmount(amount: number): this;
+	initWithAmountCurrencyCode(amount: number, currencyCode: SQRDCurrencyCode): this;
+	isEqual(object: SQRDMoney): boolean;
+}
+
+export declare class SQRDReaderSDK extends NSObject {
+	static alloc(): SQRDReaderSDK; // inherited from NSObject
+	static initializeWithApplicationLaunchOptions(launchOptions: NSDictionary<string, any>): void;
+	static new(): SQRDReaderSDK; // inherited from NSObject
+	readonly authorizedLocation: SQRDLocation;
+	readonly canDeauthorize: boolean;
+	readonly isAuthorizationInProgress: boolean;
+	readonly isAuthorized: boolean;
+	static readonly sharedSDK: SQRDReaderSDK;
+	authorizeWithCodeCompletionHandler(code: string, completionHandler: (p1: SQRDLocation, p2: NSError) => void): void;
+	deauthorizeWithCompletionHandler(completionHandler: (p1: NSError) => void): void;
+}
+
+export declare class SQRDReaderSettingsController extends NSObject {
+	static alloc(): SQRDReaderSettingsController; // inherited from NSObject
+	static new(): SQRDReaderSettingsController; // inherited from NSObject
+	constructor(o: { delegate: SQRDReaderSettingsControllerDelegate; });
+	initWithDelegate(delegate: SQRDReaderSettingsControllerDelegate): this;
 	presentFromViewController(viewController: UIViewController): void;
 }
 
-export declare class SQRDCheckoutParameters extends NSObject implements NSCopying {
-	static alloc(): SQRDCheckoutParameters; // inherited from NSObject
-	static new(): SQRDCheckoutParameters; // inherited from NSObject
-	additionalPaymentTypes: SQRDAdditionalPaymentTypes;
-	allowSplitTender: boolean;
-	alwaysRequireSignature: boolean;
-	readonly amountMoney: SQRDMoney;
-	note: string;
-	skipReceipt: boolean;
-	tipSettings: SQRDTipSettings;
-	constructor(o: { amountMoney: SQRDMoney; });
-	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
-	initWithAmountMoney(amountMoney: SQRDMoney): this;
+export interface SQRDReaderSettingsControllerDelegate {
+	readerSettingsControllerDidFailToPresentWithError(readerSettingsController: SQRDReaderSettingsController, error: NSError): void;
+	readerSettingsControllerDidPresent(readerSettingsController: SQRDReaderSettingsController): void;
 }
-
-export declare class SQRDTipSettings extends NSObject implements NSCopying {
-	static alloc(): SQRDTipSettings; // inherited from NSObject
-	static new(): SQRDTipSettings; // inherited from NSObject
-	showCustomTipField: boolean;
-	showSeparateTipScreen: boolean;
-	tipPercentages: NSArray<number>;
-	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
-	isEqual(object: SQRDTipSettings): boolean;
-}
-
-export declare const enum SQRDAdditionalPaymentTypes {
-	ManualCardEntry = 1,
-	Cash = 2,
-	Other = 4
-}
-
-
-export interface SQRDCheckoutControllerDelegate extends NSObjectProtocol {
-	checkoutControllerDidCancel(checkoutController: SQRDCheckoutController): void;
-	checkoutControllerDidFailWithError(checkoutController: SQRDCheckoutController, error: NSError): void;
-	checkoutControllerDidFinishCheckoutWithResult(checkoutController: SQRDCheckoutController, result: SQRDCheckoutResult): void;
-}
-export declare var SQRDCheckoutControllerDelegate: {
-	prototype: SQRDCheckoutControllerDelegate;
+export declare var SQRDReaderSettingsControllerDelegate: {
+	prototype: SQRDReaderSettingsControllerDelegate;
 };
 
-export declare const enum SQRDCheckoutControllerError {
+export declare const enum SQRDReaderSettingsControllerError {
 	UsageError = 1,
 	SDKNotAuthorized = 2
 }
 
-export declare var SQRDCheckoutControllerErrorDomain: string;
-
-export class SquareAuthStatus {
-	code: number;
-	message: string;
-
-	constructor(code, message) {
-		this.code = code;
-		this.message = message;
-	}
-}
-
-export declare class SQRDCheckoutResult extends NSObject implements NSCopying {
-	static alloc(): SQRDCheckoutResult; // inherited from NSObject
-	static new(): SQRDCheckoutResult; // inherited from NSObject
-	readonly createdAt: Date;
-	readonly locationID: string;
-	readonly tenders: NSSet<SQRDTender>;
-	readonly totalMoney: SQRDMoney;
-	readonly totalTipMoney: SQRDMoney;
-	readonly transactionClientID: string;
-	readonly transactionID: string;
-	constructor(o: { transactionID: string; transactionClientID: string; locationID: string; createdAt: Date; tenders: NSArray<SQRDTender>; totalMoney: SQRDMoney; totalTipMoney: SQRDMoney; });
-	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
-	initWithTransactionIDTransactionClientIDLocationIDCreatedAtTendersTotalMoneyTotalTipMoney(transactionID: string, transactionClientID: string, locationID: string, createdAt: Date, tenders: NSArray<SQRDTender>, totalMoney: SQRDMoney, totalTipMoney: SQRDMoney): this;
-	isEqual(object: SQRDCheckoutResult): boolean;
-}
+export declare var SQRDReaderSettingsControllerErrorDomain: string;
 
 export declare class SQRDTender extends NSObject implements NSCopying {
 	static alloc(): SQRDTender; // inherited from NSObject
@@ -275,17 +323,6 @@ export declare class SQRDTender extends NSObject implements NSCopying {
 	isEqual(object: SQRDTender): boolean;
 }
 
-export declare class SQRDTenderCashDetails extends NSObject implements NSCopying {
-	static alloc(): SQRDTenderCashDetails; // inherited from NSObject
-	static new(): SQRDTenderCashDetails; // inherited from NSObject
-	readonly buyerTenderedMoney: SQRDMoney;
-	readonly changeBackMoney: SQRDMoney;
-	constructor(o: { buyerTenderedMoney: SQRDMoney; changeBackMoney: SQRDMoney; });
-	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
-	initWithBuyerTenderedMoneyChangeBackMoney(buyerTenderedMoney: SQRDMoney, changeBackMoney: SQRDMoney): this;
-	isEqual(object: SQRDTenderCashDetails): boolean;
-}
-
 export declare class SQRDTenderCardDetails extends NSObject implements NSCopying {
 	static alloc(): SQRDTenderCardDetails; // inherited from NSObject
 	static new(): SQRDTenderCardDetails; // inherited from NSObject
@@ -297,30 +334,6 @@ export declare class SQRDTenderCardDetails extends NSObject implements NSCopying
 	isEqual(object: SQRDTenderCardDetails): boolean;
 }
 
-export declare class SQRDCard extends NSObject implements NSCopying {
-	static alloc(): SQRDCard; // inherited from NSObject
-	static new(): SQRDCard; // inherited from NSObject
-	readonly brand: SQRDCardBrand;
-	readonly lastFourDigits: string;
-	constructor(o: { brand: SQRDCardBrand; lastFour: string; });
-	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
-	initWithBrandLastFour(cardBrand: SQRDCardBrand, lastFour: string): this;
-	isEqual(object: SQRDCard): boolean;
-}
-
-export declare const enum SQRDCardBrand {
-	OtherBrand = 0,
-	Visa = 1,
-	Mastercard = 2,
-	Discover = 3,
-	AmericanExpress = 4,
-	DiscoverDiners = 5,
-	Interac = 6,
-	JCB = 7,
-	ChinaUnionPay = 8,
-	SquareGiftCard = 9
-}
-
 export declare const enum SQRDTenderCardDetailsEntryMethod {
 	Unknown = 0,
 	Swipe = 1,
@@ -329,18 +342,51 @@ export declare const enum SQRDTenderCardDetailsEntryMethod {
 	ManuallyEntered = 4
 }
 
+export declare class SQRDTenderCashDetails extends NSObject implements NSCopying {
+	static alloc(): SQRDTenderCashDetails; // inherited from NSObject
+	static new(): SQRDTenderCashDetails; // inherited from NSObject
+	readonly buyerTenderedMoney: SQRDMoney;
+	readonly changeBackMoney: SQRDMoney;
+	constructor(o: { buyerTenderedMoney: SQRDMoney; changeBackMoney: SQRDMoney; });
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+	initWithBuyerTenderedMoneyChangeBackMoney(buyerTenderedMoney: SQRDMoney, changeBackMoney: SQRDMoney): this;
+	isEqual(object: SQRDTenderCashDetails): boolean;
+}
+
 export declare const enum SQRDTenderType {
 	Other = 0,
 	Card = 1,
 	Cash = 2
 }
 
-// main implementation
+export declare class SQRDTipSettings extends NSObject implements NSCopying {
+	static alloc(): SQRDTipSettings; // inherited from NSObject
+	static new(): SQRDTipSettings; // inherited from NSObject
+	showCustomTipField: boolean;
+	showSeparateTipScreen: boolean;
+	tipPercentages: NSArray<number>;
+	copyWithZone(zone: interop.Pointer | interop.Reference<any>): any;
+	isEqual(object: SQRDTipSettings): boolean;
+}
 
+export class SquareAuthStatus {
+	code: number;
+	message: string;
+
+	constructor(code, message) {
+		this.code = code;
+		this.message = message;
+	}
+}
+
+
+// main implementation
+@ObjCClass(SQRDCheckoutControllerDelegate)
 export class SquareReader extends NSObject implements SQRDCheckoutControllerDelegate {
 
 	private locationManager;
 	private paymentTypes = SQRDAdditionalPaymentTypes.ManualCardEntry;
+	
 
 	constructor() {
 		super();
@@ -431,11 +477,11 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 
 		params.additionalPaymentTypes = allowedPaymentTypes;
 		console.log("Set additional params");
-		let checkoutController: SQRDCheckoutController = new SQRDCheckoutController({ parameters: null, delegate: this});
+		let checkoutController: SQRDCheckoutController = new SQRDCheckoutController({ parameters: params, delegate: this});
 		console.log("Create checkout controller...");
-		checkoutController.initWithParametersDelegate(params, this);
+		// checkoutController.initWithParametersDelegate(params, this);
 		console.log("Initialized checkout controller");
-		checkoutController.presentFromViewController(null);
+		checkoutController.presentFromViewController(view);
 
 	}
 }

@@ -71,6 +71,7 @@ export class HelloWorldModel extends UIViewController {
     if (!this.isSquareAuthenticated) {
       return alert("Not authenticated!");
     }
+    console.log("This:", this);
     this.squareReader.startCheckout(100, this);
   }
 

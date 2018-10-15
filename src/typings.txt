@@ -685,9 +685,19 @@ ruby <(curl https://connect.squareup.com/readersdk-installer) install --app-id s
 (0x185676d8c 0x1848305ec 0x185684098 0x18f769db0 0x18567c5c8 0x18556241c 0x10254a1f4 0x184f68aa0 0x184f68a60 0x184f7565c 0x18561f070 0x18561cbc8 0x18553cda8 0x187522020 0x18f55c758 0x1021ec044 0x1021ea7a4 0x1021ea26c 0x1018a1630 0x101e9ce14 0x101ea5a24 0x101ea5a34 0x101e9eee0 0x101e38198 0x101e0de94 0x101fa2b9c 0x1018b6354 0x10203e964 0x101ea6494 0x101ea5a34 0x101ea5a34 0x101ea5a34 0x101e9eee0 0x101e38198 0x101e0de94 0x101fa2c80 0x10203a8e0 0x1018ad898 0x1018f3f50 0x10115e29c 0x184fcdfc0)
 
 
-I'm attempting to create a NativeScript plugin (based off the seed) for an existing SDK (Square Reader: https://docs.connect.squareup.com/payments/readersdk/setup-ios) and it requires you to pass in a UIViewController as one of its final steps so it can display a screen. I'm consistently getting this error:
 
-> -[SquareReader checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x10a3091a0
+
+
+
+
+
+Passing UIViewController to native iOS methods
+
+
+
+I'm attempting to create a new plugin for Square Reader (iOS instructions https://docs.connect.squareup.com/payments/readersdk/setup-ios). The last step is to pass in a `UIViewController` object so it can display the checkout page in your app. When trying to pass in the required parameters, I am consistently getting an error like this:
+
+> -[SquareReader checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x10aa5c960
 *** JavaScript call stack:
 (
 0   UIApplicationMain@[native code]
@@ -698,19 +708,20 @@ I'm attempting to create a NativeScript plugin (based off the seed) for an exist
 5   @:7:48
 6   promiseReactionJob@:1:11
 )
-*** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[SquareReader checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x10a3091a0'
+*** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[SquareReader checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x10aa5c960'
 *** First throw call stack:
-(0x185676d8c 0x1848305ec 0x185684098 0x18567c5c8 0x18556241c 0x1019021f4 0x184f68aa0 0x184f68a60 0x184f7565c 0x18561f070 0x18561cbc8 0x18553cda8 0x187522020 0x18f55c758 0x1015a4044 0x1015a27a4 0x1015a226c 0x100c59630 0x101254e14 0x10125da24 0x10125da34 0x101256ee0 0x1011f0198 0x1011c5e94 0x10135ab9c 0x100c6e354 0x1013f6964 0x10125e494 0x10125da34 0x10125da34 0x10125da34 0x101256ee0 0x1011f0198 0x1011c5e94 0x10135ac80 0x1013f28e0 0x100c65898 0x100cabf50 0x10045629c 0x184fcdfc0)
+(0x185676d8c 0x1848305ec 0x185684098 0x18567c5c8 0x18556241c 0x1019b21f4 0x184f68aa0 0x184f68a60 0x184f7565c 0x18561f070 0x18561cbc8 0x18553cda8 0x187522020 0x18f55c758 0x101640044 0x10163e7a4 0x10163e26c 0x100cf5630 0x1012f0e14 0x1012f9a24 0x1012f9a34 0x1012f2ee0 0x10128c198 0x101261e94 0x1013f6b9c 0x100d0a354 0x101492964 0x1012fa494 0x1012f9a34 0x1012f9a34 0x1012f9a34 0x1012f2ee0 0x10128c198 0x101261e94 0x1013f6c80 0x10148e8e0 0x100d01898 0x100d47f50 0x10079629c 0x184fcdfc0)
 
-I'm trying to implement a UIViewController in my demo app:
+I'm trying to implement a `UIViewController` in my demo app:
+
  `export class HelloWorldModel extends UIViewController { ... }`
+
 The error comes from these lines:
-`
-let checkoutController = new SQRDCheckoutController( {parameters: params, delegate: this });
+
+> let checkoutController = new SQRDCheckoutController( {parameters: params, delegate: this }); 
 checkoutController.presentFromViewController(view);
-`
-where 'this' is a SquareReader class I made that has the function  'checkoutControllerDidFailWithError' (that I need to have to implement SQRDCheckoutControllerDelegate) and 'view' is an instantiation of the HelloWorldModel class.
 
-I don't see much for UIViewControllers in {N} but I found  @wwwalkerrun  
+where `this` is a `SquareReader` class object I made that has the function  `checkoutControllerDidFailWithError` (that I need to have to implement `SQRDCheckoutControllerDelegate`) and `view` is an instantiation of the `HelloWorldModel` class.
 
-
+I don't see anything for passing `UIViewController`s to native iOS methods in {N} but I found  @wwwalkerrun had some input on https://discourse.nativescript.org/t/example-of-extending-uiviewcontroller-in-angular-2-and-nativescript/469
+which might be similar?
