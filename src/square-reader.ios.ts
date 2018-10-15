@@ -465,10 +465,6 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 		console.log("Finished with result:", result);
 	}
 
-	didFailWithError(test) {
-		console.log("Maybe this will appease the gods");
-	}
-
 	public startCheckout(amount: number, view: UIViewController, currencyCode: SQRDCurrencyCode = SQRDCurrencyCode.USD, allowedPaymentTypes: SQRDAdditionalPaymentTypes = this.paymentTypes) {
 		let amountMoney = new SQRDMoney({ amount, currencyCode});
 		console.log("Amount money:", amountMoney);
@@ -479,7 +475,7 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 		console.log("Set additional params");
 		let checkoutController: SQRDCheckoutController = new SQRDCheckoutController({ parameters: params, delegate: this});
 		console.log("Create checkout controller...");
-		// checkoutController.initWithParametersDelegate(params, this);
+		checkoutController.initWithParametersDelegate(params, this);
 		console.log("Initialized checkout controller");
 		checkoutController.presentFromViewController(view);
 
