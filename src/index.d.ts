@@ -382,5 +382,5 @@ export declare class SquareReader extends NSObject implements SQRDCheckoutContro
   checkoutControllerDidCancel(checkoutController: SQRDCheckoutController): void;
   checkoutControllerDidFailWithError(checkoutController: SQRDCheckoutController, error: NSError): void;
   checkoutControllerDidFinishCheckoutWithResult(checkoutController: SQRDCheckoutController, result: SQRDCheckoutResult): void;
-  startCheckout(amount: number, view: UIViewController, currencyCode?: SQRDCurrencyCode, allowedPaymentTypes?: SQRDAdditionalPaymentTypes): void;
+  startCheckout(amount: number, view, currencyCode?: SQRDCurrencyCode, allowedPaymentTypes?: SQRDAdditionalPaymentTypes): void;
 }
