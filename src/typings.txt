@@ -686,42 +686,14 @@ ruby <(curl https://connect.squareup.com/readersdk-installer) install --app-id s
 
 
 
+// from image-swipe
+UIScrollViewPagedDelegate = UIScrollViewPagedDelegate_1 = __decorate([
+        ObjCClass(UIScrollViewDelegate)
+    ], UIScrollViewPagedDelegate);
 
+// in square-reader
+SquareReader = __decorate([
+        ObjCClass(exports.SQRDCheckoutControllerDelegate)
+    ], SquareReader);
 
-
-
-
-Passing UIViewController to native iOS methods
-
-
-
-I'm attempting to create a new plugin for Square Reader (iOS instructions https://docs.connect.squareup.com/payments/readersdk/setup-ios). The last step is to pass in a `UIViewController` object so it can display the checkout page in your app. When trying to pass in the required parameters, I am consistently getting an error like this:
-
-> -[SquareReader checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x10aa5c960
-*** JavaScript call stack:
-(
-0   UIApplicationMain@[native code]
-1   start@file:///app/tns_modules/tns-core-modules/application/application.js:272:26
-2   anonymous@file:///app/app.js:4:18
-3   evaluate@[native code]
-4   moduleEvaluation@:1:11
-5   @:7:48
-6   promiseReactionJob@:1:11
-)
-*** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[SquareReader checkoutController:didFailWithError:]: unrecognized selector sent to instance 0x10aa5c960'
-*** First throw call stack:
-(0x185676d8c 0x1848305ec 0x185684098 0x18567c5c8 0x18556241c 0x1019b21f4 0x184f68aa0 0x184f68a60 0x184f7565c 0x18561f070 0x18561cbc8 0x18553cda8 0x187522020 0x18f55c758 0x101640044 0x10163e7a4 0x10163e26c 0x100cf5630 0x1012f0e14 0x1012f9a24 0x1012f9a34 0x1012f2ee0 0x10128c198 0x101261e94 0x1013f6b9c 0x100d0a354 0x101492964 0x1012fa494 0x1012f9a34 0x1012f9a34 0x1012f9a34 0x1012f2ee0 0x10128c198 0x101261e94 0x1013f6c80 0x10148e8e0 0x100d01898 0x100d47f50 0x10079629c 0x184fcdfc0)
-
-I'm trying to implement a `UIViewController` in my demo app:
-
- `export class HelloWorldModel extends UIViewController { ... }`
-
-The error comes from these lines:
-
-> let checkoutController = new SQRDCheckoutController( {parameters: params, delegate: this }); 
-checkoutController.presentFromViewController(view);
-
-where `this` is a `SquareReader` class object I made that has the function  `checkoutControllerDidFailWithError` (that I need to have to implement `SQRDCheckoutControllerDelegate`) and `view` is an instantiation of the `HelloWorldModel` class.
-
-I don't see anything for passing `UIViewController`s to native iOS methods in {N} but I found  @wwwalkerrun had some input on https://discourse.nativescript.org/t/example-of-extending-uiviewcontroller-in-angular-2-and-nativescript/469
-which might be similar?
+==> undefined is not a protocol object  
