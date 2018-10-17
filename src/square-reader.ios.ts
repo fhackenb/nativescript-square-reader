@@ -1,13 +1,3 @@
-// import { Common } from '../square-reader.common';
-
-// import { SQRDAdditionalPaymentTypes, SQRDCheckoutControllerDelegate, SQRDReaderSDK, SQRDCheckoutController, 
-// 	 	SQRDLocation, SQRDCurrencyCode, SQRDCheckoutParameters, SQRDCheckoutResult, SQRDMoney } from './SQRDeclarations';
-
-// export * from './SQRDeclarations';
-
-
-// import { SQRDAdditionalPaymentTypes, SQRDCheckoutControllerDelegate, SQRDReaderSDK, SQRDCheckoutController, 
-// 	SQRDLocation, SQRDCurrencyCode, SQRDCheckoutParameters, SQRDCheckoutResult, SQRDMoney} from './SQRDeclarations';
 
 export class SquareAuthStatus {
 	code: number;
@@ -21,7 +11,7 @@ export class SquareAuthStatus {
 
 
 // main implementation
-// @ObjCClass(SQRDCheckoutControllerDelegate)
+@ObjCClass(SQRDCheckoutControllerDelegate)
 export class SquareReader extends NSObject implements SQRDCheckoutControllerDelegate {
 
 	private locationManager;
