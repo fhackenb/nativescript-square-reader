@@ -56,7 +56,6 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 
 	public authenticate(code: string): Promise<SquareAuthStatus> {
 		return new Promise( (resolve, reject) => {
-			console.log("SDK:", SQRDReaderSDK);
 			this.checkPermissions()
 				.then( res => {
 					SQRDReaderSDK.initializeWithApplicationLaunchOptions(null);
@@ -66,7 +65,6 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 							if (location && !error) {
 								resolve(new SquareAuthStatus(0, JSON.stringify(location)));
 							} else {
-								console.log("Error:", error);
 								reject(new SquareAuthStatus(5, "Square Auth error: " + error));
 							}
 						});
@@ -75,7 +73,6 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 					}
 				})
 				.catch( err => {
-					console.log("Permissions denied:", err);
 					reject(err);
 				})
 		});
@@ -105,33 +102,18 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 	}
 
 	checkoutControllerDidFinishCheckoutWithResult(checkoutController: SQRDCheckoutController, result: SQRDCheckoutResult) {
-		console.log("_________________++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=")
-		console.log("Result is:", result);
-		for (var key in result) {
-			if (key.indexOf("trans") !== -1)  
-				console.log("Key: " + key + " value: " + result[key]);
-		}
-		console.log("TransactionId:", result.locationID);
-
-
 		const successRes = new SquareCheckoutResult(CheckoutResultStatus.Succeeded, "Success", null, null, result);
 		this.checkoutSubscription.next(successRes);
 	}
 
 	public startCheckout(amount: number, view, currencyCode: SQRDCurrencyCode = SQRDCurrencyCode.USD, allowedPaymentTypes: SQRDAdditionalPaymentTypes = 7): Observable<SquareCheckoutResult> {
 		let amountMoney = new SQRDMoney({ amount, currencyCode});
-		console.log("Amount money:", amountMoney);
 		let params = new SQRDCheckoutParameters({ amountMoney });
-		console.log("Params:", params);
-		console.log("Allowed payment types:", allowedPaymentTypes);
 		params.additionalPaymentTypes = allowedPaymentTypes;
-		console.log("Set additional params");
 		let checkoutController: SQRDCheckoutController = new SQRDCheckoutController({ parameters: params, delegate: this});
 		checkoutController.presentFromViewController(view);
 		this.checkoutSubscription  = new Subject<SquareCheckoutResult>();
 		this.checkoutSubscription$ = this.checkoutSubscription.asObservable();
-		console.log("COS:", this.checkoutSubscription$);
 		return this.checkoutSubscription$;
-
 	}
 }
