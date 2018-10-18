@@ -697,3 +697,7 @@ SquareReader = __decorate([
     ], SquareReader);
 
 ==> undefined is not a protocol object  
+
+
+
+// Warning: Attempt to present <RQCommerceAPIViewController: 0x10ded0710> on <HelloWorldModel: 0x10b001340> whose view is not in the window hierarchy!
