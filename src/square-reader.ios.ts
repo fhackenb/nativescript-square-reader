@@ -1,20 +1,13 @@
-
-export class SquareAuthStatus {
-	code: number;
-	message: string;
-
-	constructor(code, message) {
-		this.code = code;
-		this.message = message;
-	}
-}
-
+import { Observable, Subject } from "rxjs";
+import { SquareAuthStatus, SquareCheckoutResult, CheckoutResultStatus } from './square-reader.common';
 
 // main implementation
 @ObjCClass(SQRDCheckoutControllerDelegate)
 export class SquareReader extends NSObject implements SQRDCheckoutControllerDelegate {
 
 	private locationManager;
+	private checkoutSubscription: Subject<SquareCheckoutResult>;
+	private checkoutSubscription$: Observable<SquareCheckoutResult>;
 
 	constructor() {
 		super();
@@ -43,7 +36,7 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 		});
 	}
 
-	// some square features require microphone, location permissions
+	// square reader requires microphone, location permissions
 	private checkPermissions(): Promise<SquareAuthStatus> {
 		return new Promise( (resolve, reject) => {
 			let isLocationAuthorized = this.checkLocationPermissions();
@@ -60,7 +53,6 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 				});
 		});
 	}
-
 
 	public authenticate(code: string): Promise<SquareAuthStatus> {
 		return new Promise( (resolve, reject) => {
@@ -90,20 +82,43 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 	}
 
 	checkoutControllerDidCancel(checkoutController: SQRDCheckoutController) {
-		console.log("cancelled. Controller:", checkoutController);
+		const cancelledRes = new SquareCheckoutResult(CheckoutResultStatus.Cancelled, "Cancelled");
+		this.checkoutSubscription.next(cancelledRes);
 	}
 
 	checkoutControllerDidFailWithError(checkoutController: SQRDCheckoutController, error: NSError) {
-		console.log("Failed. Controller:", checkoutController);
-		console.log("Error:", error);
+		let errorCode = error.code;
+		let errorMessage = "";
+		switch (error.code) {
+			case SQRDReaderSettingsControllerError.SDKNotAuthorized:
+				errorMessage = "Reader SDK is not authorized";
+				break;
+			case SQRDReaderSettingsControllerError.UsageError:
+				errorMessage = "Usage Error";
+				if (error.userInfo && error.userInfo.debugDescription) {
+					errorMessage += ": " + error.userInfo.debugDescription;
+				}
+				break;
+		}
+		const errorRes = new SquareCheckoutResult(CheckoutResultStatus.Failed, "Failed", errorMessage, errorCode);
+		this.checkoutSubscription.next(errorRes);
 	}
 
 	checkoutControllerDidFinishCheckoutWithResult(checkoutController: SQRDCheckoutController, result: SQRDCheckoutResult) {
-		console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		console.log("Finished with result:", result);
+		console.log("_________________++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=")
+		console.log("Result is:", result);
+		for (var key in result) {
+			if (key.indexOf("trans") !== -1)  
+				console.log("Key: " + key + " value: " + result[key]);
+		}
+		console.log("TransactionId:", result.locationID);
+
+
+		const successRes = new SquareCheckoutResult(CheckoutResultStatus.Succeeded, "Success", null, null, result);
+		this.checkoutSubscription.next(successRes);
 	}
 
-	public startCheckout(amount: number, view, currencyCode: SQRDCurrencyCode = SQRDCurrencyCode.USD, allowedPaymentTypes: SQRDAdditionalPaymentTypes = 7) {
+	public startCheckout(amount: number, view, currencyCode: SQRDCurrencyCode = SQRDCurrencyCode.USD, allowedPaymentTypes: SQRDAdditionalPaymentTypes = 7): Observable<SquareCheckoutResult> {
 		let amountMoney = new SQRDMoney({ amount, currencyCode});
 		console.log("Amount money:", amountMoney);
 		let params = new SQRDCheckoutParameters({ amountMoney });
@@ -113,6 +128,10 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 		console.log("Set additional params");
 		let checkoutController: SQRDCheckoutController = new SQRDCheckoutController({ parameters: params, delegate: this});
 		checkoutController.presentFromViewController(view);
+		this.checkoutSubscription  = new Subject<SquareCheckoutResult>();
+		this.checkoutSubscription$ = this.checkoutSubscription.asObservable();
+		console.log("COS:", this.checkoutSubscription$);
+		return this.checkoutSubscription$;
 
 	}
 }
