@@ -15,7 +15,7 @@ You will need to follow the steps here: (https://docs.connect.squareup.com/payme
 
 
 ## Usage 
-
+See demo app for example usage
 
     
 ## License
