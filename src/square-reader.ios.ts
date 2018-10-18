@@ -15,8 +15,6 @@ export class SquareAuthStatus {
 export class SquareReader extends NSObject implements SQRDCheckoutControllerDelegate {
 
 	private locationManager;
-	private paymentTypes = SQRDAdditionalPaymentTypes.Cash;
-	static OBJCProtocols = [SQRDCheckoutControllerDelegate];
 
 	constructor() {
 		super();
@@ -105,17 +103,15 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 		console.log("Finished with result:", result);
 	}
 
-	public startCheckout(amount: number, view, currencyCode: SQRDCurrencyCode = SQRDCurrencyCode.USD, allowedPaymentTypes: SQRDAdditionalPaymentTypes = this.paymentTypes) {
+	public startCheckout(amount: number, view, currencyCode: SQRDCurrencyCode = SQRDCurrencyCode.USD, allowedPaymentTypes: SQRDAdditionalPaymentTypes = 7) {
 		let amountMoney = new SQRDMoney({ amount, currencyCode});
 		console.log("Amount money:", amountMoney);
 		let params = new SQRDCheckoutParameters({ amountMoney });
 		console.log("Params:", params);
+		console.log("Allowed payment types:", allowedPaymentTypes);
 		params.additionalPaymentTypes = allowedPaymentTypes;
 		console.log("Set additional params");
 		let checkoutController: SQRDCheckoutController = new SQRDCheckoutController({ parameters: params, delegate: this});
-		console.log("Create checkout controller...");
-		checkoutController.initWithParametersDelegate(params, this);
-		console.log("Initialized checkout controller");
 		checkoutController.presentFromViewController(view);
 
 	}
