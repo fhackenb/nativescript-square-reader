@@ -4,22 +4,18 @@ import { SquareAuthStatus } from '../../src/square-reader.ios';
 import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 import * as geolocation from "nativescript-geolocation";
 import * as platform from "tns-core-modules/platform";
+import { profile } from "tns-core-modules/profiling";
+import { Page } from 'tns-core-modules/ui/page/page';
 
-export class HelloWorldModel extends UIViewController {
+export class HelloWorldModel {
   public isSquareAuthenticated: boolean = false;
-  private squareReader: SquareReader;
-  // replace this with your square authoriation code (mobile auth api)
-  private code: string = "sq0acp-VZNQYm4zTSS1IJE6GUEazMxpXLHpvG3SulCF_MogcpU";
+  public squareReader: SquareReader;
+  public code: string = this.code = "sq0acp-9gn4PwxnKmhESbZrrcDwLuu8M1ZoBE_Z9PL5n0NoqOk";
+  public page: Page;
 
-
-  constructor() {
-    super(null);
-    console.log("Constructed...");
-  }
-
-  public viewDidLoad() {
-    super.viewDidLoad();
-    console.log("View did load!");
+  constructor(page: Page) { 
+    this.page = page;
+    this.initialize();
   }
 
   private initialize() {
@@ -39,18 +35,19 @@ export class HelloWorldModel extends UIViewController {
   }
 
   private authenticateSquare() {
-    this.authorizeLocation()
+      // authenticate with square
+      this.authorizeLocation()
       .then( res => {
-        // proceed with square
         this.squareReader = new SquareReader();
         console.log("Square reader {N}:", this.squareReader);
+        console.log("Prepare to authorize with code:", this.code);
         this.squareReader.authenticate(this.code)
           .then( (res: SquareAuthStatus) => {
             console.log("Status:", res);
-            
             if (res.code === 0) {
               this.isSquareAuthenticated = true;
               alert("Square Authenticated!");
+              // this.checkout();
             } else {
               alert("Not Authenticated? Status:" + res.code);
             }
@@ -59,11 +56,11 @@ export class HelloWorldModel extends UIViewController {
             console.log("Auth error:", err);
             alert("Auth error status:" + err.code);
           });
-      })
-      .catch( err => {
-        console.log("Erorr in location access:", err);
-        alert("Location error:" + err.code);
-      })
+        })
+        .catch( err => {
+          console.log("Erorr in location access:", err);
+          alert("Location error:" + err.code);
+        })
   }
 
   public checkout() {
@@ -71,8 +68,9 @@ export class HelloWorldModel extends UIViewController {
     if (!this.isSquareAuthenticated) {
       return alert("Not authenticated!");
     }
-    console.log("This:", this);
-    this.squareReader.startCheckout(100, this);
+    let uiVC = this.page.ios;
+    console.log("This page controller:", uiVC);
+    this.squareReader.startCheckout(100, uiVC);
   }
 
 

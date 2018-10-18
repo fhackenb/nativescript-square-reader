@@ -2,8 +2,6 @@
   xmlns:ui="nativescript-square-reader">
   <StackLayout class="p-20">
     <Label text="iOS Test" class="t-20 text-center c-black" textWrap="true"/>
-    
-    <Button paddingTop="100px" text="Authenticate" tap="{{ initialize }}"></Button>
-    
+        
     <Button paddingTop="100px" text="Start Checkout" tap="{{ checkout }}" ></Button>  </StackLayout>
 </Page>
