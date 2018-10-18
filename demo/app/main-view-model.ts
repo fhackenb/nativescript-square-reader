@@ -61,23 +61,23 @@ export class HelloWorldModel {
     if (!this.isSquareAuthenticated) {
       return alert("Not authenticated!");
     }
-    let subscription = this.squareReader.startCheckout(100, this.page.ios);
-    subscription.subscribe( (result: SquareCheckoutResult) => {
-      alert(result.message);
-      switch (result.status) {
-        case 1:
-          console.log("Cancelled!");
-          break;
-        case 2:
-          console.log("Failed!");
-          break;
-        case 0:
-          console.log("Succeeded!");
-          console.log("LocationId:", result.checkoutResult.locationID);
-          console.log("Tenders:", result.checkoutResult.tenders);
-          break;
-      }
-    });
+    this.squareReader.startCheckout(100, this.page.ios)
+      .subscribe( (result: SquareCheckoutResult) => {
+        alert(result.message);
+        switch (result.status) {
+          case 1:
+            console.log("Cancelled!");
+            break;
+          case 2:
+            console.log("Failed!");
+            break;
+          case 0:
+            console.log("Succeeded!");
+            console.log("LocationId:", result.checkoutResult.locationID);
+            console.log("Tenders:", result.checkoutResult.tenders);
+            break;
+        }
+      });
   }
 
 
