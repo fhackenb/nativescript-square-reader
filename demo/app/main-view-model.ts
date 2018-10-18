@@ -1,6 +1,5 @@
 import { Observable } from 'tns-core-modules/data/observable';
-import { SquareReader } from 'nativescript-square-reader';
-import { SquareAuthStatus } from '../../src/square-reader.ios';
+import { SquareReader, SquareAuthStatus, CheckoutResultStatus, SquareCheckoutResult } from 'nativescript-square-reader';
 import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout";
 import * as geolocation from "nativescript-geolocation";
 import * as platform from "tns-core-modules/platform";
@@ -10,7 +9,7 @@ import { Page } from 'tns-core-modules/ui/page/page';
 export class HelloWorldModel {
   public isSquareAuthenticated: boolean = false;
   public squareReader: SquareReader;
-  public code: string = this.code = "sq0acp-9gn4PwxnKmhESbZrrcDwLuu8M1ZoBE_Z9PL5n0NoqOk";
+  public code: string = this.code = "sq0acp-RqsgSF-ay4C7hvxrtOtGUTOwvTXXi80Pft7qi-lRMrc";
   public page: Page;
 
   constructor(page: Page) { 
@@ -47,7 +46,7 @@ export class HelloWorldModel {
             if (res.code === 0) {
               this.isSquareAuthenticated = true;
               alert("Square Authenticated!");
-              // this.checkout();
+              this.checkout();
             } else {
               alert("Not Authenticated? Status:" + res.code);
             }
@@ -70,7 +69,27 @@ export class HelloWorldModel {
     }
     let uiVC = this.page.ios;
     console.log("This page controller:", uiVC);
-    this.squareReader.startCheckout(100, uiVC);
+    let subscription = this.squareReader.startCheckout(100, uiVC);
+    console.log("Subscription:", subscription);
+    subscription.subscribe( (result: SquareCheckoutResult) => {
+      console.log("Subscription:", result);
+      console.log("message:", result.message);
+      console.log("Status:", result.status);
+      alert(result.message);
+      switch (result.status) {
+        case 1:
+          console.log("Cancelled!");
+          break;
+        case 2:
+          console.log("Failed!");
+          break;
+        case 0:
+          console.log("Succeeded!");
+          console.log("LocationId:", result.checkoutResult.locationID);
+          console.log("TransactionId:", result.checkoutResult.tenders);
+          break;
+      }
+    });
   }
 
 
