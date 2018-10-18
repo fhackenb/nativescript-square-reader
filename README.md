@@ -1,6 +1,6 @@
 # NativeScript Square Reader
 
-iOS only (for now) nativescript plugin for the Square Reader SDK (https://squareup.com/us/en/developers/reader-sdk)[https://squareup.com/us/en/developers/reader-sdk]
+iOS only (for now) nativescript plugin for the Square Reader SDK https://squareup.com/us/en/developers/reader-sdk
 
 
 ## Installation
@@ -10,7 +10,7 @@ iOS only (for now) nativescript plugin for the Square Reader SDK (https://square
 
 ## Setup
 
-You will need to follow the steps here: (https://docs.connect.squareup.com/payments/readersdk/setup-ios)[https://docs.connect.squareup.com/payments/readersdk/setup-ios]
+You will need to follow the steps here: https://docs.connect.squareup.com/payments/readersdk/setup-ios
 
 
 
