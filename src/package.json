@@ -1,7 +1,7 @@
 {
     "name": "nativescript-square-reader",
     "version": "1.0.0",
-    "description": "Your awesome NativeScript plugin.",
+    "description": "Allows you to accept payments through square without leaving your app. iOS only (for now) works on iOS 11+",
     "main": "square-reader",
     "typings": "index.d.ts",
     "nativescript": {
@@ -29,13 +29,12 @@
     },
     "keywords": [
         "NativeScript",
-        "JavaScript",
-        "Android",
+        "Square Reader",
         "iOS"
     ],
     "author": {
-        "name": "Your Name",
-        "email": "youremail@yourdomain.com"
+        "name": "Frank",
+        "email": "fchack93@gmail.com"
     },
     "bugs": {
         "url": "https://github.com/fhackenb/nativescript-square-reader/issues"
