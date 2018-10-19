@@ -16,7 +16,7 @@ iOS setup guide: https://docs.connect.squareup.com/payments/readersdk/setup-ios
 
 1. `tns plugin add nativescript-square-reader`
 2. Update your Info.plist with usage descriptions (Step 3 from link)
-3. Get a an auth code https://docs.connect.squareup.com/payments/readersdk/mobile-authz-guide
+3. Get an auth code https://docs.connect.squareup.com/payments/readersdk/mobile-authz-guide
 4. Get coding!
 
 
