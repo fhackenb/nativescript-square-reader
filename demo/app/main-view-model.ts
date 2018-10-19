@@ -9,7 +9,7 @@ import { Page } from 'tns-core-modules/ui/page/page';
 export class HelloWorldModel {
   public isSquareAuthenticated: boolean = false;
   public squareReader: SquareReader;
-  public code: string = this.code = "sq0acp-RqsgSF-ay4C7hvxrtOtGUTOwvTXXi80Pft7qi-lRMrc";
+  public code: string = this.code = "sq0acp-lZXeKyRinp56Wk9lpK7cFdVv0jozl3t3pv2JKbTkfp8";
   public page: Page;
 
   constructor(page: Page) { 
