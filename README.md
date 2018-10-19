@@ -22,37 +22,37 @@ iOS setup guide: https://docs.connect.squareup.com/payments/readersdk/setup-ios
 See demo app for more detailed example usage
 
 Authenticate:
-`
-    this.squareReader = new SquareReader();
-    this.squareReader.authenticate(this.code)
-        .then( (res: SquareAuthStatus) => {
-            if (res.code === 0) {
-                // authenticated
-            } else {
-              // not authenticated
-            }
-          })
-`
+```
+this.squareReader = new SquareReader();
+this.squareReader.authenticate(this.code)
+    .then( (res: SquareAuthStatus) => {
+        if (res.code === 0) {
+            // authenticated
+        } else {
+            // not authenticated
+        }
+    });
+```
 
 Check out:
-`
-    this.squareReader.startCheckout(100, this.page.ios)
-      .subscribe( (result: SquareCheckoutResult) => {
+```
+this.squareReader.startCheckout(100, this.page.ios)
+    .subscribe( (result: SquareCheckoutResult) => {
         switch (result.status) {
-          case 1:
+            case 1:
             console.log("Cancelled!");
             break;
-          case 2:
+            case 2:
             console.log("Failed!");
             break;
-          case 0:
+            case 0:
             console.log("Succeeded!");
             console.log("LocationId:", result.checkoutResult.locationID);
             console.log("Tenders:", result.checkoutResult.tenders);
             break;
         }
-      });
-`
+    });
+```
 
 
 
