@@ -1,6 +1,6 @@
 {
     "name": "nativescript-square-reader",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Allows you to accept payments through square without leaving your app. iOS only (for now) works on iOS 11+",
     "main": "square-reader",
     "typings": "index.d.ts",

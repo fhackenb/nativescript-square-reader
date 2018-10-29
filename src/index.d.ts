@@ -18,7 +18,8 @@ export declare class SquareAuthStatus {
     message: string;
     constructor(code: any, message: any);
 }
-export declare class SquareReader extends NSObject {
+
+export declare class SquareReader extends NSObject implements SQRDCheckoutControllerDelegate {
     private locationManager;
     private checkoutSubscription;
     private checkoutSubscription$;
@@ -30,5 +31,5 @@ export declare class SquareReader extends NSObject {
     checkoutControllerDidCancel(checkoutController): void;
     checkoutControllerDidFailWithError(checkoutController, error: NSError): void;
     checkoutControllerDidFinishCheckoutWithResult(checkoutController, result): void;
-    startCheckout(amount: number, view: any, currencyCode?, allowedPaymentTypes?): Observable<any>;
+    startCheckout(amount: number, view: any, currencyCode?, allowedPaymentTypes?): Observable<SquareCheckoutResult>;
 }

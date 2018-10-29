@@ -12,5 +12,5 @@ export declare class SquareReader extends NSObject implements SQRDCheckoutContro
     checkoutControllerDidCancel(checkoutController: SQRDCheckoutController): void;
     checkoutControllerDidFailWithError(checkoutController: SQRDCheckoutController, error: NSError): void;
     checkoutControllerDidFinishCheckoutWithResult(checkoutController: SQRDCheckoutController, result: SQRDCheckoutResult): void;
-    startCheckout(amount: number, view: any, currencyCode?: SQRDCurrencyCode, allowedPaymentTypes?: SQRDAdditionalPaymentTypes): Observable<SquareCheckoutResult>;
+    startCheckout(amount: number, view: any, tipsAllowed?: boolean, currencyCode?: SQRDCurrencyCode, allowedPaymentTypes?: SQRDAdditionalPaymentTypes): Observable<SquareCheckoutResult>;
 }
