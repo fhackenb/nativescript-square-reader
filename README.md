@@ -1,5 +1,8 @@
 # NativeScript Square Reader
 
+# Status: Currently in development - not yet ready for public use - if you try this now, you will need to manually switch out the SquareReaderSDK.framework
+
+
 iOS only (for now) nativescript plugin for the Square Reader SDK https://squareup.com/us/en/developers/reader-sdk
 
 Note: will only work for iOS 11+. To support older versions, consider using 

@@ -106,10 +106,15 @@ export class SquareReader extends NSObject implements SQRDCheckoutControllerDele
 		this.checkoutSubscription.next(successRes);
 	}
 
-	public startCheckout(amount: number, view, currencyCode: SQRDCurrencyCode = SQRDCurrencyCode.USD, allowedPaymentTypes: SQRDAdditionalPaymentTypes = 7): Observable<SquareCheckoutResult> {
+	public startCheckout(amount: number, view, tipsAllowed: boolean = true, currencyCode: SQRDCurrencyCode = SQRDCurrencyCode.USD, allowedPaymentTypes: SQRDAdditionalPaymentTypes = 7): Observable<SquareCheckoutResult> {
 		let amountMoney = new SQRDMoney({ amount, currencyCode});
 		let params = new SQRDCheckoutParameters({ amountMoney });
 		params.additionalPaymentTypes = allowedPaymentTypes;
+		if (tipsAllowed) {
+			let tipSettings = new SQRDTipSettings();
+			tipSettings.showCustomTipField = true;
+			params.tipSettings = tipSettings;
+		}
 		let checkoutController: SQRDCheckoutController = new SQRDCheckoutController({ parameters: params, delegate: this});
 		checkoutController.presentFromViewController(view);
 		this.checkoutSubscription  = new Subject<SquareCheckoutResult>();
