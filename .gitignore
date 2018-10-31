@@ -9,6 +9,7 @@
 !seed-tests/*.js
 seed-tests/seed-copy/**/*.*
 seed-tests/seed-copy-new-git-repo/**/*.*
+*.Framework
 !demo/karma.conf.js
 !demo/app/tests/*.js
 demo/lib
