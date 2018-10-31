@@ -1,5 +1,7 @@
 import { Observable } from "rxjs";
 
+export declare class SQRDCheckoutControllerDelegate {}
+
 export declare enum CheckoutResultStatus {
     Succeeded = 0,
     Cancelled = 1,

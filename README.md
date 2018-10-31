@@ -1,8 +1,5 @@
 # NativeScript Square Reader
 
-# Status: Currently in development - not yet ready for public use - if you try this now, you will need to manually switch out the SquareReaderSDK.framework
-
-
 iOS only (for now) nativescript plugin for the Square Reader SDK https://squareup.com/us/en/developers/reader-sdk
 
 Note: will only work for iOS 11+. To support older versions, consider using 
@@ -18,13 +15,15 @@ https://github.com/fhackenb/nativescript-square-plugin
 iOS setup guide: https://docs.connect.squareup.com/payments/readersdk/setup-ios
 
 1. `tns plugin add nativescript-square-reader`
-2. Update your Info.plist with usage descriptions (Step 3 from link)
-3. Get an auth code https://docs.connect.squareup.com/payments/readersdk/mobile-authz-guide
-4. Get coding!
+2. Follow steps 1 - 2 on the above list to get a SquareReaderSDK.framework
+3. Add the SquareReaderSDK.framework to your build path
+4. Update your Info.plist with usage descriptions (Step 3 from link)
+5. Get an auth code https://docs.connect.squareup.com/payments/readersdk/mobile-authz-guide
+6. Get coding!
 
 
 ## Usage 
-See demo app for more detailed example usage
+See demo app for more detailed example usage 
 
 Authenticate:
 ```
