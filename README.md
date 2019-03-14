@@ -58,6 +58,19 @@ this.squareReader.startCheckout(100, this.page.ios)
     });
 ```
 
+## Integrating w/ Square Stand
+
+Add the following permissions to your Info.plist:
+
+```
+<key>UISupportedExternalAccessoryProtocols</key>
+	<array>
+		<string>com.squareup.s020</string>
+		<string>com.squareup.s025</string>
+		<string>com.squareup.s089</string>
+	</array>
+ ```
+
 
 
 ## License
