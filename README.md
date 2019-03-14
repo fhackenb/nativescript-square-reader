@@ -44,15 +44,15 @@ this.squareReader.startCheckout(100, this.page.ios)
     .subscribe( (result: SquareCheckoutResult) => {
         switch (result.status) {
             case 1:
-            console.log("Cancelled!");
-            break;
+            	console.log("Cancelled!");
+            	break;
             case 2:
-            console.log("Failed!");
-            break;
+            	console.log("Failed!");
+            	break;
             case 0:
-            console.log("Succeeded!");
-            console.log("LocationId:", result.checkoutResult.locationID);
-            console.log("Tenders:", result.checkoutResult.tenders);
+            	console.log("Succeeded!");
+            	console.log("LocationId:", result.checkoutResult.locationID);
+            	console.log("Tenders:", result.checkoutResult.tenders);
             break;
         }
     });
