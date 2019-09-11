@@ -77,6 +77,4 @@ Add the following permissions to your Info.plist:
 
 Apache License Version 2.0, January 2004
 
-
-./gradlew jar
- java -jar build/libs/dts-generator.jar -input /Users/frank/Documents/RacknerProjects/FunFangle/plugins/nativescript-square-reader/demo/platforms/android
+(Android plugin in the works)
